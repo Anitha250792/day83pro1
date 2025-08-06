@@ -1,37 +1,16 @@
 import os
 from pathlib import Path
-import dj_database_url  # Required for Render deployment
 
-# Base directory
+# --- Base Directory ---
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Secret Key (you can use environment variable for production)
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-dev-secret-key')
+# --- Security ---
+SECRET_KEY = 'your-secret-key'  # Replace with real secret key in production
+DEBUG = True
 
-# Environment detection
-RENDER = os.environ.get('RENDER') is not None
-DEBUG = not RENDER
+ALLOWED_HOSTS = ['*']  # ⚠️ For development/testing. Use specific domain in production.
 
-# Allowed hosts
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = ['your-render-app.onrender.com']  # Replace with actual domain
-
-# Database configuration
-if RENDER:
-    DATABASES = {
-        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-
-# Application definition
+# --- Installed Apps ---
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,12 +18,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'books',  # Your custom app
+    'directory',  # Your custom app
 ]
 
+# --- Middleware ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files on production
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # For static files on Render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -53,12 +33,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'online_bookstore.urls'
+# --- URLs ---
+ROOT_URLCONF = 'employee_directory.urls'
 
+# --- Templates ---
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Optional global templates dir
+        'DIRS': [BASE_DIR / 'templates'],  # optional
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,25 +53,45 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'online_bookstore.wsgi.application'
+# --- WSGI ---
+WSGI_APPLICATION = 'employee_directory.wsgi.application'
 
-# Password validation
+# --- Database ---
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+# --- Password Validation ---
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
 ]
 
-# Localization
+
+# --- Internationalization ---
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# --- Static Files ---
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Optional if you use /static folder
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']  # for dev
+STATIC_ROOT = BASE_DIR / 'staticfiles'   # for Render
+
+# Enable WhiteNoise to serve static files in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Default primary key field type
+# --- Default Auto Field ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# --- Login / Logout ---
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
