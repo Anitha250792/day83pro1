@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Book List</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Bookstore</h2>
+
+  <form method="get" class="row mb-3">
+    <div class="col-md-6">
+      <input type="text" name="q" class="form-control" placeholder="Search books..." value="{{ request.GET.q }}">
+    </div>
+    <div class="col-md-4">
+      <select name="order" class="form-select">
+        <option value="title">Title</option>
+        <option value="price">Price</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+  </form>
+
+  {% for book in books %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ book.title }}</h5>
+      <p class="card-text">by {{ book.author }}</p>
+      <a href="{{ book.get_absolute_url }}" class="btn btn-outline-primary">Details</a>
+    </div>
+  </div>
+  {% empty %}
+  <p>No books found.</p>
+  {% endfor %}
+
+  <div class="mt-4">
+    {% if is_paginated %}
+      <nav>
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Previous</a>
+            </li>
+          {% endif %}
+          <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+  </div>
+
+  {% if user.is_superuser %}
+    <a href="{% url 'books:book_add' %}" class="btn btn-success mt-3">Add Book</a>
+  {% endif %}
+</div>
+</body>
+</html>

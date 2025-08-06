@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{ object.title }}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-body">
+      <h3>{{ object.title }}</h3>
+      <h5 class="text-muted">by {{ object.author }}</h5>
+      <p>{{ object.description }}</p>
+      <p><strong>Original Price:</strong> ${{ object.price }}</p>
+      <p><strong>Discounted Price:</strong> ${{ discounted_price|floatformat:2 }}</p>
+
+      {% if user.is_superuser %}
+        <a href="{% url 'books:book_edit' object.pk %}" class="btn btn-warning">Edit</a>
+        <a href="{% url 'books:book_delete' object.pk %}" class="btn btn-danger">Delete</a>
+      {% endif %}
+      <a href="{% url 'books:book_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

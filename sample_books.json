@@ -1,0 +1,46 @@
+[
+  {
+    "model": "books.book",
+    "pk": 1,
+    "fields": {
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "description": "A novel set in the Jazz Age, exploring themes of wealth and identity.",
+      "price": "299.00",
+      "discount_percentage": 10
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 2,
+    "fields": {
+      "title": "1984",
+      "author": "George Orwell",
+      "description": "A dystopian novel about totalitarianism and surveillance.",
+      "price": "350.00",
+      "discount_percentage": 15
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 3,
+    "fields": {
+      "title": "To Kill a Mockingbird",
+      "author": "Harper Lee",
+      "description": "A classic novel of racism and justice in the Deep South.",
+      "price": "400.00",
+      "discount_percentage": 20
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 4,
+    "fields": {
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "description": "An evidence-based guide to building good habits and breaking bad ones.",
+      "price": "499.00",
+      "discount_percentage": 5
+    }
+  }
+]
